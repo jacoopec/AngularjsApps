@@ -1,0 +1,138 @@
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      color: whitesmoke
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-half,
+    .bottom-half {
+      flex: 1;
+      display: flex;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .top-half > div,
+    .bottom-half > .right-side > div {
+      flex: 1;
+      border: 1px solid #aaa;
+      margin: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .bottom-half {
+      display: flex;
+    }
+
+    .bottom-half .left-side {
+      flex: 1;
+      border: 1px solid #aaa;
+      margin: 10px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .bottom-half .right-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .arrow {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #007bff;
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite paused;
+    }
+
+    .arrow.spin {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .queue {
+      min-height: 50px;
+      border: 1px dashed #999;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    .queue span {
+      display: inline-block;
+      background: #e0e0e0;
+      margin: 2px;
+      padding: 3px 6px;
+      border-radius: 3px;
+    }
+
+    .controls {
+      padding: 10px;
+      border-bottom: 2px solid #ccc;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    /* Animate items entering the call stack */
+.queue span.animate-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-in-out;
+}
+.queue span.animate-enter.animate-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animate items leaving the call stack */
+.queue span.animate-leave {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+.queue span.animate-leave.animate-leave-active {
+  opacity: 0;
+}
+
+/* Animate entry into queues */
+.queue span.animate-fade-in {
+  opacity: 0;
+  transform: translateY(-5px);
+  transition: all 0.4s ease-in;
+}
+.queue span.animate-fade-in.animate-fade-in-active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Task movement into Task Queue */
+.queue span.flash {
+  animation: flash-in 0.3s ease-in-out;
+}
+
+@keyframes flash-in {
+  0% { background-color: #ffe58f; transform: scale(1.1); }
+  100% { background-color: #e0e0e0; transform: scale(1); }
+}
+

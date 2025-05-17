@@ -49,6 +49,14 @@ body {
     font-size: 0.95rem;
 }
 
+.input-card select {
+    margin-top: 4px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
 .input-card button {
 margin-top: 10px;
 padding: 10px;

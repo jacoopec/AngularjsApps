@@ -1,0 +1,11 @@
+<div class="centered-title">Select a Market Index</div>
+<div ng-controller="MainController as main">
+  <fancy-card class="fancy-card" 
+    ng-repeat="index in main.indexes" 
+    ng-click="main.selectIndex(index)"
+    title={{index}}
+    value="13,120"
+    icon="fas fa-chart-line"
+    subtitle="Real-time value">
+  </fancy-card>
+</div>

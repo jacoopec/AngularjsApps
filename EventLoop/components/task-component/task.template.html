@@ -1,0 +1,9 @@
+<div class="right-side">
+    <h3>Task Queue</h3>
+    <div class="queue">
+    <span ng-repeat="task in ctrl.taskQueue track by $index"
+            ng-class="{'flash': ctrl.flashTaskIndex === $index}">
+        {{ task }}
+    </span>
+    </div>
+</div>

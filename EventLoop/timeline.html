@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html ng-app="timelineApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Timeline Queue</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .timeline-container {
+      display: flex;
+      overflow: hidden;
+      height: 80px;
+      margin-bottom: 20px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      position: relative;
+    }
+
+    .timeline-item {
+      min-width: 100px;
+      max-width: 100px;
+      margin-right: 10px;
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      border-radius: 6px;
+      transform: translateX(0);
+      opacity: 1;
+      transition: all 0.5s ease;
+    }
+
+    .timeline-item:hover {
+        transform: scale(1.5);
+        background-color: #0056b3;
+        z-index: 2;
+    }
+
+
+    .timeline-item.shift-right {
+      transform: translateX(110px);
+      opacity: 0.5;
+    }
+
+    form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      padding: 6px;
+      width: 200px;
+    }
+
+    button {
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+
+    .extra-info {
+    display: none;
+    font-size: 12px;
+    margin-top: 5px;
+    }
+
+    .timeline-item:hover .extra-info {
+    display: block;
+    }
+
+
+  </style>
+</head>
+<body ng-controller="TimelineController as ctrl">
+
+  <div class="timeline-container">
+    <div class="timeline-item"
+        ng-repeat="item in ctrl.timeline track by item.id"
+        ng-class="{'shift-right': ctrl.animate}">
+        <strong>{{ item.name }}</strong><br>
+        <small>{{ item.time }}</small>
+
+        <div class="extra-info">
+            <p>Extra info about "{{ item.name }}"</p>
+        </div>
+    </div>
+
+  </div>
+
+  <form ng-submit="ctrl.addItem()">
+    <input type="text" ng-model="ctrl.newName" placeholder="Event name" required>
+    <button type="submit">Add to Timeline</button>
+  </form>
+  <div>queue size:  {{ctrl.timeline.length}}</div>
+
+<script>
+  angular.module('timelineApp', [])
+    .controller('TimelineController', function($timeout) {
+      const vm = this;
+
+       vm.timeline = [{id: 1,name: 'firstItem',time:  'now'},{id: 2,name: 'secondItem',time:  'yesterday'},{id: 3, name: 'thirdEvent',time:  '20-04-2025'},{id: 4, name: 'Get something',time:  '20-02-2022'},{id: 5, name: 'My birthday',time:  '20-04-2023'}];
+        vm.newName = '';
+        vm.maxItems = 5;
+        vm.animate = false;
+        vm.showItems = true;
+        let idCounter = vm.timeline.length;
+      
+        vm.addItem = function() {
+            const timestamp = new Date().toLocaleTimeString();
+
+            // Add new item first so it gets rendered
+            vm.timeline.unshift({
+                id: idCounter++,
+                name: vm.newName,
+                time: timestamp
+            });
+            // Trigger animation on all items
+            vm.animate = true;
+
+            // After animation duration, trim the array
+            $timeout(() => {
+                if (vm.timeline.length > vm.maxItems) {
+                    vm.timeline = vm.timeline.slice(0, vm.maxItems);
+                }
+
+                vm.animate = false;
+            }, 500); // match animation duration
+
+            vm.newName = '';
+        };
+
+    });
+</script>
+
+</body>
+</html>

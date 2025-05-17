@@ -1,0 +1,6 @@
+<div class="queue">
+    <span ng-repeat="api in ctrl.webApis track by $index"
+        ng-class="{'animate-fade-in': ctrl.animateWebApiIn && $last}">
+    {{ api }}
+    </span>
+</div>

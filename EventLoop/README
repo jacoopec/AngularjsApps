@@ -1,0 +1,29 @@
+Simulates task scheduling with:
+
+Call stack execution
+
+Web API placeholders
+
+Task & microtask prioritization
+
+A spinning arrow representing the event loop tick
+
+
+ AngularJS only re-renders the DOM when the bound model changes in a way that triggers a digest cycle and affects rendering.
+
+
+ Add the new item.
+
+Force a re-render of the timeline items.
+
+Then trigger the animation.
+
+Trim the array after animation.
+
+We'll do this using $timeout with a 0-delay to separate the digest cycles.
+
+$timeout(..., 0) lets Angular finish the first digest (rendering the new item).
+
+Then we set vm.animate = true to apply the ng-class.
+
+After the animation finishes, we trim the array and reset the animation flag.

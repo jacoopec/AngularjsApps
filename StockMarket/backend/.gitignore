@@ -1,0 +1,8 @@
+cors
+angular.js
+angular.animate.js
+angular.route.js
+description
+./backend/node_modules
+./StockMarket/backend/node_modules
+./ChampionshipStandingApp/node_modules

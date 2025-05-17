@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="eventLoopSim">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Loop Simulator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <script src="./components/microtask-component/microtask.component.js"></script>
+  <!-- <script src="./components/task-component/task.component.js"></script> -->
+  <script src="./components/component.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body ng-controller="EventLoopController as ctrl">
+
+<div class="controls">
+  <button ng-click="ctrl.addWebApi()">Add Web API</button>
+  <button ng-click="ctrl.addTask()">Add Task</button>
+  <button ng-click="ctrl.addMicrotask()">Add Microtask</button>
+</div>
+
+<div class="container">
+  <!-- Top Half -->
+  <div class="top-half">
+    <!-- <stack-component></stack-component> -->
+    <!-- <webapi-component></webapi-component> -->
+  </div>
+
+  <!-- Bottom Half -->
+  <div class="bottom-half">
+    <!-- <eventloop-component></eventloop-component> -->
+
+    <h3>Task Queue</h3>
+    <div class="queue">
+      <div ng-repeat="task in ctrl.taskQueue">
+        <!-- <task-component></task-component> -->
+      </div>
+    </div>
+
+    <h3>Microtask Queue</h3>
+    <div class="queue">
+      <div ng-repeat="task in ctrl.microtaskQueue">
+        <microtask-component task = "{{task}}"></microtask-component>
+        <microtask-component task = "task"></microtask-component>
+      </div>
+    </div>
+    <component-f></component-f>
+
+  </div>
+</div>
+<script src="./script.js"></script>
+</body>
+</html>

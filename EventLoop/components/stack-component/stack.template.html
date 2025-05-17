@@ -1,0 +1,6 @@
+<div class="queue">
+    <span ng-repeat="task in ctrl.callStack track by $index"
+        ng-class="{'animate-enter': ctrl.animateIn && $last}">
+    {{ task }}
+    </span>
+</div>

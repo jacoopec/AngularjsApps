@@ -17,13 +17,17 @@
       <h3> Enter Match Result</h3>
       <form ng-submit="addMatch()">
         <label>Team 1:
-          <input ng-model="match.team1" placeholder="Enter team 1 name" required>
+          <select id="itemSelect" placeholder="no team" required ng-model="team1" ng-options="item for item in teamNames">
+            <option value="teamNames[0]" >-- Select a team --</option>
+          </select>
         </label>
         <label>Score 1:
           <input type="number" placeholder="Enter team 1 score" ng-model="match.score1" required>
         </label>
         <label>Team 2:
-          <input ng-model="match.team2" required placeholder="Enter team 2 name">
+          <select id="itemSelect" required ng-model="team2" ng-options="item for item in teamNames">
+            <option >-- Select a team --</option>
+          </select>
         </label>
         <label>Score 2:
           <input type="number" ng-model="match.score2" required placeholder="Enter team 2 score">

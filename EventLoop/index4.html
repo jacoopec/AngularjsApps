@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html ng-app="eventLoopSim">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Loop Simulator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-half,
+    .bottom-half {
+      flex: 1;
+      display: flex;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .top-half > div,
+    .bottom-half > .right-side > div {
+      flex: 1;
+      border: 1px solid #aaa;
+      margin: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .bottom-half {
+      display: flex;
+    }
+
+    .bottom-half .left-side {
+      flex: 1;
+      border: 1px solid #aaa;
+      margin: 10px;
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .bottom-half .right-side {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .arrow {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #007bff;
+      border-top: 5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite paused;
+    }
+
+    .arrow.spin {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .queue {
+      min-height: 50px;
+      border: 1px dashed #999;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    .queue span {
+      display: inline-block;
+      background: #e0e0e0;
+      margin: 2px;
+      padding: 3px 6px;
+      border-radius: 3px;
+    }
+
+    .controls {
+      padding: 10px;
+      border-bottom: 2px solid #ccc;
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body ng-controller="EventLoopController as ctrl">
+
+<div class="controls">
+  <button ng-click="ctrl.addWebApi()">Add Web API</button>
+  <button ng-click="ctrl.addTask()">Add Task</button>
+  <button ng-click="ctrl.addMicrotask()">Add Microtask</button>
+  <button ng-click="ctrl.removeMicrotask()">Remove Microtask</button>
+</div>
+
+<div class="container">
+  <!-- Top Half -->
+  <div class="top-half">
+    <div>
+      <h3>Call Stack</h3>
+      <div class="queue">
+        <span ng-repeat="task in ctrl.callStack">{{ task }}</span>
+      </div>
+    </div>
+    <div>
+      <h3>Web APIs</h3>
+      <div class="queue">
+        <span ng-repeat="api in ctrl.webApis">{{ api }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Half -->
+  <div class="bottom-half">
+    <div class="left-side">
+      <div>
+        <h3>Event Loop</h3>
+        <div class="arrow" ng-class="{ spin: ctrl.isSpinning }"></div>
+      </div>
+    </div>
+    <div class="right-side">
+      <div>
+        <h3>Task Queue</h3>
+        <div class="queue">
+          <span ng-repeat="task in ctrl.taskQueue">{{ task }}</span>
+        </div>
+      </div>
+      <div>
+        <h3>Microtask Queue</h3>
+        <div class="queue">
+          <span ng-repeat="task in ctrl.microtaskQueue">{{ task }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  angular.module('eventLoopSim', [])
+    .controller('EventLoopController', function($interval, $timeout) {
+      const vm = this;
+
+      // Queues and state
+      vm.callStack = [];
+      vm.webApis = [];
+      vm.taskQueue = [];
+      vm.microtaskQueue = [];
+      vm.isSpinning = false;
+
+      // Internal counters for naming
+      let taskCount = 1;
+      let microtaskCount = 1;
+      let webApiCount = 1;
+
+      // Button actions
+      vm.addTask = function() {
+        vm.taskQueue.push('Task ' + taskCount++);
+      };
+
+      vm.addMicrotask = function() {
+        vm.microtaskQueue.push('Microtask ' + microtaskCount++);
+        console.log(vm.microtaskQueue);
+      };
+
+      vm.removeMicrotask = function() {
+        vm.microtaskQueue.pop();
+        console.log(vm.microtaskQueue);
+      };
+
+      vm.addWebApi = function() {
+        vm.webApis.push('Web API ' + webApiCount++);
+      };
+
+      function runEventLoopCycle() {
+        console.log("Event loop running.")
+        vm.isSpinning = true;
+
+        $timeout(() => {
+          // Microtasks have priority
+          if (vm.microtaskQueue.length > 0) {
+            vm.callStack.unshift(vm.microtaskQueue.shift());
+          } else if (vm.taskQueue.length > 0) {
+            vm.callStack.unshift(vm.taskQueue.shift());
+          }
+
+          // Simulate processing the top of call stack
+          $timeout(() => {
+            vm.callStack.pop();
+            vm.isSpinning = false;
+          }, 1000);
+        }, 1000);
+      }
+
+      // Start the event loop every 2 seconds
+      $interval(runEventLoopCycle, 4000);
+    });
+</script>
+
+</body>
+</html>
